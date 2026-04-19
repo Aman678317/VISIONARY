@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "Inquiry": {
+      "title": "Partner Inquiry",
+      "description": "A lead or inquiry from a potential partner, tenant, or sponsor.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Full name of the inquirer" },
+        "email": { "type": "string", "description": "Contact email address" },
+        "business_type": { "type": "string", "description": "Type of business (e.g., fashion, tech)" },
+        "interest_type": { "type": "string", "description": "Type of interest (leasing, sponsorship, venue)" },
+        "message": { "type": "string", "description": "Detailed vision or requirement" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp of inquiry" }
+      },
+      "required": ["name", "email", "business_type", "interest_type", "message", "createdAt"]
+    },
+    "Section": {
+      "title": "Content Section",
+      "description": "A configurable content section for the interactive deck.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "headline": { "type": "string" },
+        "description": { "type": "string" },
+        "media": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "source": { "type": "string" },
+            "url": { "type": "string" },
+            "autoplay": { "type": "boolean" },
+            "loop": { "type": "boolean" }
+          }
+        },
+        "order": { "type": "integer" }
+      },
+      "required": ["title", "headline", "description", "order"]
+    },
+    "Stats": {
+      "title": "Global Stats",
+      "description": "High-level performance metrics.",
+      "type": "object",
+      "properties": {
+        "visitors": { "type": "string" },
+        "size": { "type": "string" },
+        "brands": { "type": "string" },
+        "revenuePotential": { "type": "string" }
+      },
+      "required": ["visitors", "size", "brands"]
+    }
+  },
+  "firestore": {
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Inbound leads for partnerships."
+    },
+    "/sections/{sectionId}": {
+      "schema": "Section",
+      "description": "CMS content for the platform sections."
+    },
+    "/config/stats": {
+      "schema": "Stats",
+      "description": "Global statistics and platform-wide configuration."
+    }
+  }
+}
