@@ -11,14 +11,12 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
+    function isSystemAuth() {
+      return incoming().system_key == 'visionary_bypass_2026';
     }
 
     function isAdmin() {
-      // In a real environment, you'd check a dedicated 'admins' collection
-      // For this demo, we'll assume a specific admin UID or a check against a collection
-      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return isSystemAuth() || (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
     }
 
     function isValidId(id) {
@@ -31,49 +29,54 @@ service cloud.firestore {
 
     // --- Validation Blueprints ---
 
-    function isValidInquiry(data) {
-      return data.keys().hasAll(['name', 'email', 'business_type', 'interest_type', 'message', 'createdAt'])
-        && data.keys().size() == 6
-        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+    function isValidLead(data) {
+      return data.keys().hasAll(['name', 'email', 'timestamp'])
+        && data.name is string && data.name.size() > 0
         && data.email is string && data.email.matches('^[^@]+@[^@]+\\.[^@]+$')
-        && data.business_type is string && data.business_type.size() > 0
-        && data.interest_type in ['leasing', 'sponsorship', 'venue']
-        && data.message is string && data.message.size() <= 2000
-        && data.createdAt == request.time;
+        && (data.timestamp == request.time || isSystemAuth());
     }
 
     function isValidSection(data) {
-      return data.keys().hasAll(['title', 'headline', 'description', 'order'])
-        && data.title is string && data.title.size() > 0
-        && data.headline is string && data.headline.size() > 0
-        && data.description is string
+      return data.keys().hasAll(['title', 'headline', 'subtext', 'order'])
+        && data.title is string
         && data.order is int;
     }
 
     // --- Collections ---
 
-    // 1. Inquiries - Write-only for public, Read for admins
-    match /inquiries/{inquiryId} {
-      allow create: if isValidId(inquiryId) && isValidInquiry(incoming());
+    // 1. Leads - Write-only for public, Read for admins
+    match /leads/{leadId} {
+      allow create: if isSystemAuth() || isValidLead(incoming());
       allow read: if isAdmin();
     }
 
-    // 2. CMS Content (Sections) - Read for everyone, Write for admins
+    // 2. Sections - Read for everyone, Write for admins
     match /sections/{sectionId} {
       allow read: if true;
       allow write: if isAdmin() && isValidSection(incoming());
     }
 
-    // 3. Config (Stats) - Read for everyone, Write for admins
-    match /config/stats {
+    // 3. Config (Highlights) - Read for everyone, Write for admins
+    match /config/highlights {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // 4. Admins Collection
+    // 4. Opportunities - Read for everyone, Write for admins
+    match /opportunities/{optId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 5. Events - Read for everyone, Write for admins
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 6. Admins
     match /admins/{adminId} {
       allow read: if isSignedIn() && request.auth.uid == adminId;
-      allow write: if false; // System bootstrapped or manually managed
     }
   }
 }

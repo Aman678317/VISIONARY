@@ -1,10 +1,10 @@
 {
-  "projectId": "videostream-free",
-  "appId": "1:1064841000430:web:a9dda95873a962bc074aff",
-  "apiKey": "AIzaSyD78HZSLXw2epUaJsoXAnCKrfmYckSGhEM",
-  "authDomain": "videostream-free.firebaseapp.com",
+  "projectId": "visionary-vision",
+  "appId": "1:476738751184:web:5b7e1b52225ed98cba2cd5",
+  "apiKey": "AIzaSyB0RStq4ep3IwWAVabFfolPnIPifD6UCNU",
+  "authDomain": "visionary-vision.firebaseapp.com",
   "firestoreDatabaseId": "ai-studio-3665b24a-7955-4d7b-ae4a-3c6bd1b3c00c",
-  "storageBucket": "videostream-free.firebasestorage.app",
-  "messagingSenderId": "1064841000430",
+  "storageBucket": "visionary-vision.firebasestorage.app",
+  "messagingSenderId": "476738751184",
   "measurementId": ""
 }

@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { TrendingUp, Users, ShoppingBag, Globe } from 'lucide-react';
 import { InvestmentSimulator } from './InvestmentSimulator';
 import { YouTubeBackground } from './YouTubeBackground';
 
 export const StatsSection = () => {
+  const [data, setData] = useState({
+    visitors: "105M+",
+    stores: "1,200+",
+    area: "1.1M sqm",
+    attractions: "15+"
+  });
+
+  useEffect(() => {
+    fetch('/api/highlights')
+      .then(res => res.json())
+      .then(json => setData(json))
+      .catch(err => console.error("Highlight sync failed", err));
+  }, []);
+
   const stats = [
-    { label: "Annual Footfall", value: "85M", sub: "Global Visitors", icon: Users },
-    { label: "Gross Leasable Area", value: "2.8M", sub: "Sq Ft Luxury Retail", icon: ShoppingBag },
-    { label: "Revenue Target", value: "$5.2B", sub: "Annual GMV Potential", icon: TrendingUp },
-    { label: "Regional Reach", value: "350M", sub: "People in 4hr Flight", icon: Globe },
+    { label: "Annual Footfall", value: data.visitors, sub: "Global Visitors", icon: Users },
+    { label: "Total Retail Stores", value: data.stores, sub: "Dubai Mall Ecosystem", icon: ShoppingBag },
+    { label: "Gross Leasable Area", value: data.area, sub: "GLA Mastery", icon: TrendingUp },
+    { label: "Anchor Attractions", value: data.attractions, sub: "Destination Drivers", icon: Globe },
   ];
 
   return (

@@ -6,7 +6,7 @@ import { ArrowDown } from 'lucide-react';
 export const HeroSection = () => {
   return (
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-      <YouTubeBackground videoId="ahy5o5nT4oI" startTime={80} overlayOpacity={0.6} />
+      <YouTubeBackground videoId="RD0xom40iEE" startTime={0} overlayOpacity={0.6} />
       
       <div className="relative z-10 text-center px-6">
         <motion.p

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 
-export const Navbar = () => {
+export const Navbar = ({ onSearchOpen }: { onSearchOpen: () => void }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -45,6 +45,12 @@ export const Navbar = () => {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
+          <button 
+            onClick={onSearchOpen}
+            className="text-white/60 hover:text-luxury-gold transition-colors p-2"
+          >
+            <Search size={20} />
+          </button>
           {navLinks.map((link, i) => (
             <motion.a
               key={link.name}
@@ -67,12 +73,20 @@ export const Navbar = () => {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden text-white"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="flex items-center gap-4 md:hidden">
+          <button 
+            onClick={onSearchOpen}
+            className="text-white/60 hover:text-luxury-gold transition-colors"
+          >
+            <Search size={20} />
+          </button>
+          <button 
+            className="text-white"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
